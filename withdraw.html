@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Withdraw | First State Bank</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root{
+      --ink:#1B1712;
+      --ink-soft:#2A2115;
+      --ink-3:#352C1E;
+      --gold:#B8862E;
+      --gold-light:#D9AE5F;
+      --gold-pale:#F1E4C6;
+      --cream:#FBF7EE;
+      --cream-2:#F2EAD6;
+      --paper:#FFFFFF;
+      --text:#2B2419;
+      --muted:#77695A;
+      --border:#E6DCC2;
+      --green:#2F7A4A;
+      --green-pale:#E4F1E8;
+      --red:#B23A2E;
+      --red-pale:#F7E4E1;
+      --radius:2px;
+      --shadow:0 18px 40px -22px rgba(27,23,18,0.35);
+      --sidebar-w:260px;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+    body{
+      margin:0;background:var(--cream);color:var(--text);
+      font-family:"Inter",system-ui,sans-serif;font-size:16px;line-height:1.6;
+      -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    }
+    body.nav-open{overflow:hidden;}
+    img{max-width:100%;display:block;height:auto;}
+    a{color:inherit;text-decoration:none;}
+    button{font-family:inherit;}
+    h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--ink);margin:0 0 .5em;letter-spacing:-0.01em;}
+    p{margin:0 0 1em;color:var(--muted);}
+
+    /* APPBAR */
+    .appbar{
+      position:sticky;top:0;z-index:80;background:var(--ink);
+      border-bottom:1px solid var(--ink-3);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 24px;gap:16px;
+    }
+    .appbar .brand{display:flex;align-items:center;gap:10px;color:#fff;flex:none;}
+    .appbar .brand-text{line-height:1.1;}
+    .appbar .brand-text .b1{font-family:"Fraunces",serif;color:#fff;font-size:16px;font-weight:600;display:block;}
+    .appbar .brand-text .b2{font-size:10px;letter-spacing:.14em;color:var(--gold-light);display:block;}
+    .appbar-right{display:flex;align-items:center;gap:14px;}
+    .bell{
+      position:relative;width:40px;height:40px;border-radius:50%;
+      background:#2A2115;border:1px solid #3E3421;color:#E9E2D2;
+      display:flex;align-items:center;justify-content:center;cursor:pointer;
+      transition:border-color .2s, color .2s;
+    }
+    .bell:hover{border-color:var(--gold);color:var(--gold-light);}
+    .bell::after{
+      content:"";position:absolute;top:9px;right:10px;
+      width:7px;height:7px;border-radius:50%;background:var(--gold);
+      box-shadow:0 0 0 2px var(--ink);
+    }
+    .user-chip{
+      display:flex;align-items:center;gap:10px;cursor:pointer;
+      padding:4px 10px 4px 4px;border-radius:40px;
+      background:#2A2115;border:1px solid #3E3421;transition:border-color .2s;
+    }
+    .user-chip:hover{border-color:var(--gold);}
+    .user-chip img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+    .user-chip .uname{color:#fff;font-size:13.5px;font-weight:600;line-height:1.1;}
+    .user-chip .urole{color:var(--gold-light);font-size:11px;letter-spacing:.06em;}
+    .menu-btn{
+      display:none;background:none;border:0;color:#fff;width:44px;height:44px;
+      cursor:pointer;align-items:center;justify-content:center;
+    }
+    .menu-btn span{display:block;width:22px;height:2px;background:#fff;position:relative;}
+    .menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0;width:22px;height:2px;background:#fff;transition:transform .3s, top .3s;}
+    .menu-btn span::before{top:-7px;}
+    .menu-btn span::after{top:7px;}
+    .menu-btn.active span{background:transparent;}
+    .menu-btn.active span::before{top:0;transform:rotate(45deg);}
+    .menu-btn.active span::after{top:0;transform:rotate(-45deg);}
+
+    .layout{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:calc(100vh - 66px);}
+
+    /* SIDEBAR */
+    aside.sidebar{
+      background:var(--paper);border-right:1px solid var(--border);
+      padding:22px 16px;position:sticky;top:66px;align-self:start;
+      height:calc(100vh - 66px);overflow-y:auto;
+    }
+    .side-group{margin-bottom:24px;}
+    .side-group h6{
+      font-family:"Inter",sans-serif;font-size:11px;letter-spacing:.14em;
+      color:var(--muted);margin:0 0 8px 12px;font-weight:600;text-transform:uppercase;
+    }
+    .side-link{
+      display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:var(--radius);
+      color:var(--text);font-size:14.5px;font-weight:500;
+      border-left:3px solid transparent;transition:background .2s, border-color .2s, color .2s;
+    }
+    .side-link svg{flex:none;color:var(--muted);transition:color .2s;}
+    .side-link:hover{background:var(--cream);}
+    .side-link:hover svg{color:var(--gold);}
+    .side-link.active{background:var(--cream-2);color:var(--ink);font-weight:600;border-left-color:var(--gold);}
+    .side-link.active svg{color:var(--gold);}
+    .side-cta{
+      background:linear-gradient(150deg,#1B1712,#3E3122);
+      color:#fff;border-radius:var(--radius);padding:20px 18px;margin-top:8px;
+    }
+    .side-cta h6{color:#fff;font-family:"Fraunces",serif;font-size:16px;font-weight:600;margin:0 0 6px;letter-spacing:0;}
+    .side-cta p{color:#C7BBA1;font-size:13px;margin:0 0 12px;}
+    .side-cta a{
+      display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--ink);
+      padding:9px 14px;border-radius:var(--radius);font-size:13px;font-weight:600;
+    }
+    .side-cta a:hover{background:var(--gold-light);}
+
+    /* MAIN */
+    main.content{padding:28px 32px 60px;min-width:0;}
+    .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;}
+    .page-head h1{font-size:clamp(24px,3vw,30px);margin-bottom:4px;}
+    .page-head p{margin:0;font-size:14.5px;}
+    .back-link{
+      display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+      font-size:13.5px;margin-bottom:10px;font-weight:500;
+    }
+    .back-link:hover{color:var(--gold);}
+    .back-link svg{transition:transform .2s;}
+    .back-link:hover svg{transform:translateX(-3px);}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:11px 20px;border-radius:var(--radius);
+      font-size:14px;font-weight:600;cursor:pointer;border:1px solid transparent;
+      transition:transform .2s, background .2s, border-color .2s, color .2s;
+      font-family:"Inter",sans-serif;min-height:44px;
+    }
+    .btn:hover{transform:translateY(-2px);}
+    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    .btn-gold{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+    .btn-gold:hover:not(:disabled){background:var(--gold-light);border-color:var(--gold-light);}
+    .btn-dark{background:var(--ink);color:#fff;border-color:var(--ink);}
+    .btn-dark:hover:not(:disabled){background:var(--ink-soft);}
+    .btn-line{background:transparent;border-color:var(--border);color:var(--ink);}
+    .btn-line:hover{border-color:var(--gold);color:var(--gold);}
+    .btn-block{width:100%;}
+
+    /* WITHDRAW GRID */
+    .w-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:start;}
+
+    .form-card{
+      background:var(--paper);border:1px solid var(--border);
+      border-radius:var(--radius);padding:32px 32px 28px;
+    }
+    .form-card h2{font-size:20px;margin-bottom:6px;}
+    .form-card .sub{font-size:14px;margin-bottom:24px;color:var(--muted);}
+
+    .field{margin-bottom:18px;}
+    .field label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+    .field label .req{color:var(--red);}
+    .field input, .field select, .field textarea{
+      width:100%;padding:13px 14px;border:1px solid var(--border);border-radius:var(--radius);
+      font-family:"Inter",sans-serif;font-size:14.5px;background:var(--cream);color:var(--text);
+      transition:border-color .2s, background .2s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus{
+      outline:none;border-color:var(--gold);background:#fff;
+    }
+    .field .hint{font-size:12.5px;color:var(--muted);margin-top:6px;}
+
+    /* AMOUNT INPUT WITH PREFIX */
+    .amount-wrap{position:relative;}
+    .amount-wrap .currency{
+      position:absolute;left:14px;top:50%;transform:translateY(-50%);
+      color:var(--muted);font-family:"Fraunces",serif;font-size:18px;pointer-events:none;
+    }
+    .amount-wrap input{padding-left:38px;font-family:"Fraunces",serif;font-size:18px;font-weight:600;}
+
+    /* QUICK AMOUNT CHIPS */
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+    .chip{
+      background:var(--cream-2);border:1px solid var(--border);
+      padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;
+      cursor:pointer;color:var(--ink);transition:all .2s;
+    }
+    .chip:hover{background:var(--gold-pale);border-color:var(--gold);}
+
+    /* PIN INPUTS */
+    .pin-row{display:flex;gap:12px;justify-content:flex-start;margin-top:6px;}
+    .pin-box{
+      width:56px;height:64px;border:1px solid var(--border);border-radius:var(--radius);
+      background:var(--cream);text-align:center;font-family:"Fraunces",serif;
+      font-size:26px;font-weight:600;color:var(--ink);
+      transition:border-color .2s, background .2s, transform .15s;
+    }
+    .pin-box:focus{outline:none;border-color:var(--gold);background:#fff;transform:translateY(-2px);}
+    .pin-box.filled{background:#fff;border-color:var(--gold-light);}
+
+    /* SUMMARY CARD */
+    .summary{
+      background:linear-gradient(155deg,#1B1712 0%,#2C2416 55%,#5A4726 100%);
+      color:#fff;border-radius:var(--radius);padding:28px 26px;position:relative;overflow:hidden;
+      position:sticky;top:90px;
+    }
+    .summary::after{
+      content:"";position:absolute;inset:0;
+      background-image:radial-gradient(circle,rgba(217,174,95,.14) 1px,transparent 1px);
+      background-size:22px 22px;pointer-events:none;opacity:.7;
+    }
+    .summary h3{color:#fff;font-size:17px;margin-bottom:20px;position:relative;}
+    .summary .row{
+      display:flex;justify-content:space-between;gap:12px;
+      padding:10px 0;border-bottom:1px solid #3E3421;
+      font-size:13.5px;position:relative;
+    }
+    .summary .row:last-of-type{border-bottom:0;}
+    .summary .row span{color:#C7BBA1;}
+    .summary .row strong{color:#fff;font-weight:600;}
+    .summary .total{
+      display:flex;justify-content:space-between;align-items:baseline;
+      padding-top:16px;margin-top:8px;border-top:1px solid #3E3421;
+      position:relative;
+    }
+    .summary .total span{color:#C7BBA1;font-size:12px;letter-spacing:.1em;text-transform:uppercase;}
+    .summary .total strong{
+      font-family:"Fraunces",serif;font-size:26px;color:var(--gold-light);
+    }
+    .summary .note{
+      margin-top:20px;padding:12px 14px;background:#2A2115;border-left:3px solid var(--gold);
+      font-size:12.5px;color:#C7BBA1;position:relative;border-radius:2px;
+    }
+
+    /* RECENT WITHDRAWALS */
+    .mini-list{margin-top:24px;}
+    .mini-list h4{font-size:14px;margin-bottom:12px;}
+    .mini-item{
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      padding:10px 0;border-bottom:1px solid var(--border);font-size:13.5px;
+    }
+    .mini-item:last-child{border-bottom:0;}
+    .mini-item .mi-t{font-weight:600;color:var(--ink);}
+    .mini-item .mi-s{color:var(--muted);font-size:12px;}
+    .mini-item .mi-a{font-family:"Fraunces",serif;font-weight:600;color:var(--red);}
+
+    /* MODAL */
+    .modal-bg{
+      position:fixed;inset:0;background:rgba(15,12,7,.65);
+      display:none;align-items:center;justify-content:center;z-index:200;padding:20px;
+      backdrop-filter:blur(4px);
+    }
+    .modal-bg.show{display:flex;animation:fadeIn .25s ease;}
+    .modal{
+      background:var(--paper);border-radius:var(--radius);max-width:480px;width:100%;
+      padding:36px 34px 30px;text-align:center;box-shadow:var(--shadow);
+      animation:popIn .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .modal .m-ico{
+      width:66px;height:66px;border-radius:50%;background:var(--green-pale);color:var(--green);
+      display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+    }
+    .modal .m-ico.warn{background:#FBF0D9;color:#8A6A20;}
+    .modal .m-ico.err{background:var(--red-pale);color:var(--red);}
+    .modal h3{font-size:22px;margin-bottom:8px;}
+    .modal p{font-size:14.5px;margin-bottom:20px;}
+    .modal .m-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+    .modal .m-actions .btn{flex:1;min-width:130px;}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    @keyframes popIn{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
+
+    /* MOBILE */
+    .side-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s;z-index:90;}
+    .side-backdrop.show{opacity:1;pointer-events:auto;}
+
+    @media (max-width:1100px){
+      .w-grid{grid-template-columns:1fr;}
+      .summary{position:static;}
+    }
+    @media (max-width:960px){
+      .layout{grid-template-columns:1fr;}
+      aside.sidebar{
+        position:fixed;inset:0 auto 0 0;width:min(300px,84vw);
+        transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+        z-index:95;height:100vh;top:0;box-shadow:20px 0 60px rgba(0,0,0,.35);
+      }
+      aside.sidebar.open{transform:translateX(0);}
+      .menu-btn{display:flex;}
+      main.content{padding:22px 20px 60px;}
+    }
+    @media (max-width:640px){
+      .appbar{padding:10px 14px;}
+      .appbar .brand-text .b1{font-size:15px;}
+      .appbar .brand-text .b2{display:none;}
+      .user-chip .uname,.user-chip .urole{display:none;}
+      .user-chip{padding:4px;}
+      .user-chip img{width:34px;height:34px;}
+      .form-card{padding:24px 20px 22px;}
+      .pin-box{width:50px;height:58px;font-size:22px;}
+      .pin-row{gap:8px;}
+      .summary{padding:24px 20px;}
+      .page-head h1{font-size:22px;}
+    }
+    @media (max-width:420px){
+      .pin-box{width:44px;height:54px;font-size:20px;}
+      .pin-row{gap:6px;}
+      .chips{gap:6px;}
+      .chip{padding:5px 11px;font-size:12px;}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{transition:none!important;animation:none!important;}
+    }
+
+    /* toast */
+    .toast{
+      position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(120%);
+      background:var(--ink);color:#fff;padding:12px 22px;border-radius:40px;
+      font-size:13.5px;box-shadow:var(--shadow);z-index:210;
+      transition:transform .35s cubic-bezier(.4,0,.2,1);
+      display:flex;align-items:center;gap:10px;
+    }
+    .toast.show{transform:translateX(-50%) translateY(0);}
+    .toast .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu"><span></span></button>
+    <a class="brand" href="dashboard.html">
+      <svg width="34" height="34" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M24 3 L43 10 V22 C43 33 35.5 41.5 24 45 C12.5 41.5 5 33 5 22 V10 Z" fill="#1B1712" stroke="#D9AE5F" stroke-width="1.5"/>
+        <path d="M16 18h16M16 24h12M16 30h9" stroke="#D9AE5F" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-text"><span class="b1">First State Bank</span><span class="b2">SINCE 2011</span></span>
+    </a>
+  </div>
+  <div class="appbar-right">
+    <button class="bell" aria-label="Notifications" id="bellBtn">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M6 8a4 4 0 018 0c0 4 1.5 5 2 5H4c.5 0 2-1 2-5z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M8.2 16a1.8 1.8 0 003.6 0" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+    </button>
+    <div class="user-chip">
+      <img id="userAvatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+      <div>
+        <div class="uname" id="userName">Loading…</div>
+        <div class="urole">Personal Account</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="side-backdrop" id="sideBackdrop"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-group">
+      <h6>Main</h6>
+      <a class="side-link" href="dashboard.html">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 9l7-6 7 6v8a1 1 0 01-1 1h-4v-5H8v5H4a1 1 0 01-1-1V9z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
+        Dashboard
+      </a>
+      <a class="side-link" href="transactions.html">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        Transactions
+      </a>
+    </div>
+    <div class="side-group">
+      <h6>Money</h6>
+      <a class="side-link" href="transfer.html">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 7l11-4v14L3 13V7z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M14 7h2.5a1.5 1.5 0 010 3H14" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+        Transfer
+      </a>
+      <a class="side-link active" href="withdraw.html">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 3v10M6 9l4 4 4-4" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 16h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        Withdraw
+      </a>
+    </div>
+    <div class="side-group">
+      <h6>Account</h6>
+      <a class="side-link" href="settings.html">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="2.6" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M10 2.5l1.4 1.8 2.2-.6.7 2.2 2.2.7-.6 2.2 1.8 1.4-1.8 1.4.6 2.2-2.2.7-.7 2.2-2.2-.6L10 17.5l-1.4-1.8-2.2.6-.7-2.2-2.2-.7.6-2.2L2.3 10l1.8-1.4-.6-2.2 2.2-.7.7-2.2 2.2.6L10 2.5z" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"/></svg>
+        Settings
+      </a>
+      <a class="side-link" href="support.html">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 4.5h14v9H8l-4 3v-3H3v-9z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
+        Support
+      </a>
+    </div>
+    <div class="side-group">
+      <div class="side-cta">
+        <h6>Need cash fast?</h6>
+        <p>Apply for a personal loan and get a decision within 24 hours.</p>
+        <a href="support.html">Talk to us &rarr;</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <a class="back-link" href="dashboard.html">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Dashboard
+    </a>
+
+    <div class="page-head">
+      <div>
+        <h1>Withdraw Funds</h1>
+        <p>Minimum withdrawal: <strong style="color:var(--ink);">$100.00 USD</strong> • Payment code required.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn btn-line" href="transactions.html">History</a>
+      </div>
+    </div>
+
+    <div class="w-grid">
+
+      <!-- FORM -->
+      <form class="form-card" id="withdrawForm" novalidate>
+        <h2>Withdrawal details</h2>
+        <p class="sub">Tell us where to send your money and confirm with your 4-digit payment code.</p>
+
+        <div class="field">
+          <label for="amount">Amount <span class="req">*</span></label>
+          <div class="amount-wrap">
+            <span class="currency">$</span>
+            <input type="number" id="amount" name="amount" placeholder="0.00" min="100" step="0.01" required>
+          </div>
+          <div class="chips">
+            <span class="chip" data-amt="100">$100</span>
+            <span class="chip" data-amt="250">$250</span>
+            <span class="chip" data-amt="500">$500</span>
+            <span class="chip" data-amt="1000">$1,000</span>
+            <span class="chip" data-amt="2500">$2,500</span>
+          </div>
+          <div class="hint" id="amountHint">Available balance: <strong id="availBal">$12,450.75</strong></div>
+        </div>
+
+        <div class="field">
+          <label for="bankName">Bank Name <span class="req">*</span></label>
+          <input type="text" id="bankName" name="bankName" placeholder="e.g. First State Bank" required>
+        </div>
+
+        <div class="field">
+          <label for="acctNum">Account Number <span class="req">*</span></label>
+          <input type="text" id="acctNum" name="acctNum" placeholder="Enter your account number" inputmode="numeric" required>
+        </div>
+
+        <div class="field">
+          <label for="routing">Routing Number (optional)</label>
+          <input type="text" id="routing" name="routing" placeholder="Enter routing number" inputmode="numeric">
+        </div>
+
+        <div class="field">
+          <label for="acctName">Account Holder Name <span class="req">*</span></label>
+          <input type="text" id="acctName" name="acctName" placeholder="Full name on the account" required>
+        </div>
+
+        <div class="field">
+          <label for="note">Note (optional)</label>
+          <input type="text" id="note" name="note" placeholder="e.g. Rent payment">
+        </div>
+
+        <div class="field" style="margin-top:24px;">
+          <label>4-Digit Payment Code <span class="req">*</span></label>
+          <div class="pin-row">
+            <input class="pin-box" type="password" inputmode="numeric" maxlength="1" data-pin="0" aria-label="PIN digit 1">
+            <input class="pin-box" type="password" inputmode="numeric" maxlength="1" data-pin="1" aria-label="PIN digit 2">
+            <input class="pin-box" type="password" inputmode="numeric" maxlength="1" data-pin="2" aria-label="PIN digit 3">
+            <input class="pin-box" type="password" inputmode="numeric" maxlength="1" data-pin="3" aria-label="PIN digit 4">
+          </div>
+          <div class="hint">Forgot your code? <a href="settings.html" style="color:var(--gold);font-weight:600;">Change it in Settings</a>.</div>
+        </div>
+
+        <button type="submit" class="btn btn-gold btn-block" style="margin-top:20px;" id="submitBtn">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M10 3v10M6 9l4 4 4-4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 16h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Confirm Withdrawal
+        </button>
+      </form>
+
+      <!-- SUMMARY SIDE -->
+      <div>
+        <div class="summary">
+          <h3>Withdrawal summary</h3>
+          <div class="row"><span>Amount</span><strong id="sumAmount">$0.00</strong></div>
+          <div class="row"><span>Fee</span><strong>$0.00</strong></div>
+          <div class="row"><span>Destination</span><strong id="sumDest">—</strong></div>
+          <div class="row"><span>Processing</span><strong>Instant</strong></div>
+          <div class="total">
+            <span>Total Debit</span>
+            <strong id="sumTotal">$0.00</strong>
+          </div>
+          <div class="note">
+            Your payment code is not stored in plain text. Every withdrawal is logged with a reference number for your records.
+          </div>
+        </div>
+
+        <div class="form-card mini-list" style="margin-top:20px;">
+          <h4 style="font-family:'Fraunces',serif;font-size:16px;margin-bottom:12px;">Recent withdrawals</h4>
+          <div class="mini-item">
+            <div>
+              <div class="mi-t">To bank • 0192</div>
+              <div class="mi-s">Feb 10, 2026 • Pending</div>
+            </div>
+            <div class="mi-a">-$200.00</div>
+          </div>
+          <div class="mini-item">
+            <div>
+              <div class="mi-t">To bank • 0192</div>
+              <div class="mi-s">Feb 2, 2026 • Completed</div>
+            </div>
+            <div class="mi-a">-$150.00</div>
+          </div>
+          <div class="mini-item">
+            <div>
+              <div class="mi-t">To bank • 0192</div>
+              <div class="mi-s">Jan 21, 2026 • Completed</div>
+            </div>
+            <div class="mi-a">-$500.00</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modalBox">
+    <div class="m-ico" id="modalIco">
+      <svg width="30" height="30" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h3 id="modalTitle">Withdrawal submitted</h3>
+    <p id="modalText">Your withdrawal request has been received.</p>
+    <div class="m-actions">
+      <button class="btn btn-line" id="modalClose">Close</button>
+      <a class="btn btn-gold" id="modalReceipt" href="receipt.html">View Receipt</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Done</span></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- DUMMY USER ---------------- */
+  var DUMMY_USER = {
+    uid: "demo-user-001",
+    name: "David Miller",
+    balance: 12450.75,
+    paymentCodeHash: null,       // in real app this is set in Settings
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+  };
+  var MIN_WITHDRAW = 100;
+
+  /* ---------------- HELPERS ---------------- */
+  function fmtUSD(n){
+    var sign = n < 0 ? "-" : "";
+    var abs = Math.abs(n);
+    return sign + "$" + abs.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  function showToast(msg){
+    var t = document.getElementById("toast");
+    var m = document.getElementById("toastMsg");
+    if(!t || !m) return;
+    m.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ t.classList.remove("show"); }, 2600);
+  }
+
+  /* ---------------- PAINT USER ---------------- */
+  var nameEl = document.getElementById("userName");
+  var avatarEl = document.getElementById("userAvatar");
+  var availEl = document.getElementById("availBal");
+  if(nameEl) nameEl.textContent = DUMMY_USER.name;
+  if(avatarEl) avatarEl.src = DUMMY_USER.avatar;
+  if(availEl) availEl.textContent = fmtUSD(DUMMY_USER.balance);
+
+  /* ---------------- SIDEBAR ---------------- */
+  var menuBtn = document.getElementById("menuBtn");
+  var sidebar = document.getElementById("sidebar");
+  var sideBackdrop = document.getElementById("sideBackdrop");
+  function closeSide(){
+    if(!sidebar) return;
+    sidebar.classList.remove("open");
+    if(sideBackdrop) sideBackdrop.classList.remove("show");
+    if(menuBtn) menuBtn.classList.remove("active");
+    document.body.classList.remove("nav-open");
+  }
+  function openSide(){
+    if(!sidebar) return;
+    sidebar.classList.add("open");
+    if(sideBackdrop) sideBackdrop.classList.add("show");
+    if(menuBtn) menuBtn.classList.add("active");
+    document.body.classList.add("nav-open");
+  }
+  if(menuBtn) menuBtn.addEventListener("click", function(){
+    if(sidebar.classList.contains("open")) closeSide(); else openSide();
+  });
+  if(sideBackdrop) sideBackdrop.addEventListener("click", closeSide);
+  window.addEventListener("resize", function(){ if(window.innerWidth > 960) closeSide(); });
+
+  /* ---------------- AMOUNT CHIPS ---------------- */
+  var amountInput = document.getElementById("amount");
+  var sumAmount = document.getElementById("sumAmount");
+  var sumTotal = document.getElementById("sumTotal");
+  var sumDest = document.getElementById("sumDest");
+
+  document.querySelectorAll(".chip").forEach(function(c){
+    c.addEventListener("click", function(){
+      amountInput.value = c.getAttribute("data-amt");
+      amountInput.dispatchEvent(new Event("input"));
+    });
+  });
+
+  function updateSummary(){
+    var v = parseFloat(amountInput.value) || 0;
+    sumAmount.textContent = fmtUSD(v);
+    sumTotal.textContent = fmtUSD(v); // no fee
+    var bank = document.getElementById("bankName").value.trim();
+    var acct = document.getElementById("acctNum").value.trim();
+    var last4 = acct ? acct.slice(-4) : "";
+    sumDest.textContent = (bank || "—") + (last4 ? " • " + last4 : "");
+  }
+  if(amountInput) amountInput.addEventListener("input", updateSummary);
+  ["bankName","acctNum"].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener("input", updateSummary);
+  });
+
+  /* ---------------- PIN BOXES ---------------- */
+  var pinBoxes = Array.from(document.querySelectorAll(".pin-box"));
+
+  function getPin(){
+    return pinBoxes.map(function(b){ return b.value; }).join("");
+  }
+  pinBoxes.forEach(function(box, i){
+    box.addEventListener("input", function(){
+      var v = box.value.replace(/\D/g,"");
+      box.value = v.slice(0,1);
+      box.classList.toggle("filled", box.value !== "");
+      if(box.value && i < pinBoxes.length - 1) pinBoxes[i+1].focus();
+    });
+    box.addEventListener("keydown", function(e){
+      if(e.key === "Backspace" && !box.value && i > 0){
+        pinBoxes[i-1].focus();
+        pinBoxes[i-1].value = "";
+        pinBoxes[i-1].classList.remove("filled");
+        e.preventDefault();
+      }
+      if(e.key === "ArrowLeft" && i > 0) pinBoxes[i-1].focus();
+      if(e.key === "ArrowRight" && i < pinBoxes.length - 1) pinBoxes[i+1].focus();
+    });
+    box.addEventListener("paste", function(e){
+      var txt = (e.clipboardData || window.clipboardData).getData("text").replace(/\D/g,"");
+      if(txt.length){
+        e.preventDefault();
+        for(var k=0;k<pinBoxes.length && k<txt.length;k++){
+          pinBoxes[k].value = txt[k];
+          pinBoxes[k].classList.add("filled");
+        }
+        var next = Math.min(txt.length, pinBoxes.length - 1);
+        pinBoxes[next].focus();
+      }
+    });
+  });
+
+  /* ---------------- MODAL ---------------- */
+  var modalBg = document.getElementById("modalBg");
+  var modalTitle = document.getElementById("modalTitle");
+  var modalText = document.getElementById("modalText");
+  var modalIco = document.getElementById("modalIco");
+  var modalClose = document.getElementById("modalClose");
+  var modalReceipt = document.getElementById("modalReceipt");
+
+  function openModal(opts){
+    modalTitle.textContent = opts.title;
+    modalText.textContent = opts.text;
+    modalIco.className = "m-ico " + (opts.type || "");
+    modalReceipt.href = opts.receiptUrl || "receipt.html";
+    modalReceipt.style.display = opts.showReceipt === false ? "none" : "inline-flex";
+    modalBg.classList.add("show");
+  }
+  if(modalClose) modalClose.addEventListener("click", function(){ modalBg.classList.remove("show"); });
+  modalBg.addEventListener("click", function(e){ if(e.target === modalBg) modalBg.classList.remove("show"); });
+
+  /* ---------------- FORM SUBMIT ---------------- */
+  var form = document.getElementById("withdrawForm");
+  var submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    var amount = parseFloat(amountInput.value) || 0;
+    var bank = document.getElementById("bankName").value.trim();
+    var acct = document.getElementById("acctNum").value.trim();
+    var holder = document.getElementById("acctName").value.trim();
+    var pin = getPin();
+
+    // Validation
+    if(!amount || amount <= 0){
+      showToast("Enter a valid amount"); return;
+    }
+    if(amount < MIN_WITHDRAW){
+      showToast("Minimum withdrawal is " + fmtUSD(MIN_WITHDRAW)); return;
+    }
+    if(amount > DUMMY_USER.balance){
+      showToast("Amount exceeds your available balance"); return;
+    }
+    if(!bank){ showToast("Enter the bank name"); document.getElementById("bankName").focus(); return; }
+    if(!acct || acct.length < 4){ showToast("Enter a valid account number"); document.getElementById("acctNum").focus(); return; }
+    if(!holder){ showToast("Enter the account holder name"); document.getElementById("acctName").focus(); return; }
+    if(pin.length !== 4){ showToast("Enter your 4-digit payment code"); return; }
+
+    // Simulate processing
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = "Processing…";
+
+    setTimeout(function(){
+      // Generate a reference number
+      var ref = "WDR-" + Date.now().toString().slice(-10);
+      var txn = {
+        id: ref,
+        uid: DUMMY_USER.uid,
+        type: "withdrawal",
+        amount: -amount,
+        bank: bank,
+        accountNumber: acct,
+        accountHolder: holder,
+        routing: document.getElementById("routing").value.trim(),
+        note: document.getElementById("note").value.trim(),
+        pinUsed: "••••",          // never store raw PIN
+        status: "pending",
+        createdAt: new Date().toISOString()
+      };
+
+      // TODO: save to Firestore here (see commented block below)
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M10 3v10M6 9l4 4 4-4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 16h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Confirm Withdrawal';
+
+      openModal({
+        title: "Withdrawal submitted",
+        text: "Your withdrawal of " + fmtUSD(amount) + " to " + bank + " is being processed. Reference: " + ref,
+        type: "",
+        receiptUrl: "receipt.html?id=" + ref
+      });
+
+      // Reset PIN boxes
+      pinBoxes.forEach(function(b){ b.value = ""; b.classList.remove("filled"); });
+
+      showToast("Withdrawal request created");
+    }, 900);
+  });
+
+  /* ----------------------------------------------------------------
+     FIREBASE HOOK
+     ----------------------------------------------------------------
+     import { getAuth, onAuthStateChanged } from ".../firebase-auth.js";
+     import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, updateDoc, increment } from ".../firebase-firestore.js";
+
+     onAuthStateChanged(auth, async (user) => {
+       if(!user){ window.location.href = "login.html"; return; }
+       const userRef = doc(db, "users", user.uid);
+       const snap = await getDoc(userRef);
+       if(snap.exists()){
+         const data = snap.data();
+         DUMMY_USER = { uid: user.uid, ...data };  // real balance
+         if(nameEl) nameEl.textContent = data.fullName || data.name;
+         if(availEl) availEl.textContent = fmtUSD(data.balance || 0);
+       }
+     });
+
+     // On submit success:
+     // await addDoc(collection(db, "transactions"), txn);
+     // await updateDoc(userRef, { balance: increment(-amount), pendingWithdrawals: increment(amount) });
+     ---------------------------------------------------------------- */
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service | First State Bank</title>
+<meta name="description" content="Read the terms of service governing use of the First State Bank website.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root{
+      --ink:#1B1712;--ink-soft:#2A2115;--ink-3:#352C1E;
+      --gold:#B8862E;--gold-light:#D9AE5F;--gold-pale:#F1E4C6;
+      --cream:#FBF7EE;--cream-2:#F2EAD6;--paper:#FFFFFF;
+      --text:#2B2419;--muted:#77695A;--border:#E6DCC2;
+      --radius:2px;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+    body{margin:0;background:var(--cream);color:var(--text);font-family:"Inter",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    body.nav-open{overflow:hidden;}
+    img{max-width:100%;display:block;height:auto;}
+    a{color:inherit;text-decoration:none;}
+    button{font-family:inherit;}
+    h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--ink);margin:0 0 .5em;letter-spacing:-0.01em;}
+    p{margin:0 0 1em;color:var(--muted);}
+    .container{max-width:1180px;margin:0 auto;padding:0 28px;}
+    .eyebrow{display:inline-block;font-family:"Fraunces",serif;font-style:italic;font-size:15px;color:var(--gold);margin-bottom:10px;}
+
+    header.site-header{position:sticky;top:0;z-index:100;background:var(--ink);border-bottom:1px solid var(--ink-3);transition:background .25s ease;}
+    header.site-header.scrolled{background:rgba(27,23,18,.97);backdrop-filter:blur(8px);}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1180px;margin:0 auto;transition:padding .25s ease;}
+    header.site-header.scrolled .header-inner{padding-top:10px;padding-bottom:10px;}
+    .brand{display:flex;align-items:center;gap:12px;flex:none;}
+    .brand-text{line-height:1.15;}
+    .brand-text .b1{font-family:"Fraunces",serif;color:#fff;font-size:18px;font-weight:600;display:block;}
+    .brand-text .b2{font-size:11px;letter-spacing:.14em;color:var(--gold-light);display:block;}
+    nav.main-nav{display:flex;align-items:center;gap:32px;}
+    nav.main-nav a{color:#E9E2D2;font-size:14.5px;font-weight:500;padding:6px 2px;border-bottom:2px solid transparent;transition:border-color .2s,color .2s;}
+    nav.main-nav a:hover, nav.main-nav a.active{color:var(--gold-light);border-color:var(--gold);}
+    .header-cta{display:flex;align-items:center;gap:14px;}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:var(--radius);font-size:14.5px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:transform .2s, background .2s, border-color .2s, color .2s;font-family:"Inter",sans-serif;min-height:44px;}
+    .btn:hover{transform:translateY(-2px);}
+    .btn-gold{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+    .btn-gold:hover{background:var(--gold-light);border-color:var(--gold-light);}
+    .btn-line{border-color:#5B503C;color:#E9E2D2;background:transparent;}
+    .btn-line:hover{border-color:var(--gold-light);color:var(--gold-light);}
+    .nav-toggle{display:none;background:none;border:0;color:#fff;width:44px;height:44px;cursor:pointer;align-items:center;justify-content:center;position:relative;z-index:120;}
+    .nav-toggle span{display:block;width:24px;height:2px;background:#fff;position:relative;transition:background .2s;}
+    .nav-toggle span::before,.nav-toggle span::after{content:"";position:absolute;left:0;width:24px;height:2px;background:#fff;transition:transform .3s, top .3s;}
+    .nav-toggle span::before{top:-7px;}
+    .nav-toggle span::after{top:7px;}
+    .nav-toggle.active span{background:transparent;}
+    .nav-toggle.active span::before{top:0;transform:rotate(45deg);}
+    .nav-toggle.active span::after{top:0;transform:rotate(-45deg);}
+    .nav-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s;z-index:105;}
+    .nav-backdrop.show{opacity:1;pointer-events:auto;}
+    @media (max-width:960px){
+      nav.main-nav{position:fixed;inset:0 0 0 auto;width:min(320px,84vw);background:linear-gradient(180deg,#1B1712 0%,#241D14 100%);flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:96px 32px 32px;gap:8px;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:-20px 0 60px rgba(0,0,0,.4);border-left:1px solid var(--ink-3);z-index:110;}
+      nav.main-nav.open{transform:translateX(0);}
+      nav.main-nav a{width:100%;font-size:17px;padding:14px 4px;border-bottom:1px solid var(--ink-3);border-top:0;border-left:0;border-right:0;}
+      .nav-toggle{display:flex;}
+      .header-cta .btn-line{display:none;}
+    }
+    @media (max-width:480px){
+      .header-inner{padding:12px 18px;}
+      .container{padding:0 18px;}
+      .brand-text .b1{font-size:16px;}
+      .brand-text .b2{font-size:10px;}
+      .header-cta .btn-gold{padding:10px 16px;font-size:13px;}
+    }
+
+    .page-hero{background:linear-gradient(160deg,#1B1712 0%,#2C2416 62%,#463823 100%);padding:76px 0 60px;text-align:center;position:relative;overflow:hidden;}
+    .page-hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(217,174,95,.18) 1px,transparent 1px);background-size:22px 22px;opacity:.5;pointer-events:none;}
+    .page-hero h1{color:#fff;font-size:clamp(32px,5vw,48px);margin-bottom:14px;position:relative;}
+    .page-hero .crumb{position:relative;color:var(--gold-light);font-size:14px;letter-spacing:.06em;}
+
+    .section{padding:88px 0;}
+    .terms-body h2{font-size:22px;margin-top:38px;}
+    .terms-body h2:first-child{margin-top:0;}
+    .terms-body p{font-size:15px;color:var(--muted);}
+    .terms-body ul{color:var(--muted);font-size:15px;padding-left:20px;}
+    .terms-body li{margin-bottom:6px;}
+    .terms-meta{display:inline-block;background:var(--gold-pale);color:#7A5A18;font-size:12.5px;padding:6px 14px;border-radius:20px;margin-bottom:28px;}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease;}
+    .reveal.in{opacity:1;transform:translateY(0);}
+
+    footer.site-footer{background:var(--ink);color:#C7BBA1;padding:64px 0 0;}
+    .footer-grid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:30px;padding-bottom:48px;border-bottom:1px solid var(--ink-3);}
+    .footer-grid h5{color:#fff;font-size:13px;letter-spacing:.08em;margin-bottom:18px;font-family:"Inter",sans-serif;}
+    .footer-grid ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;}
+    .footer-grid a{font-size:14px;color:#C7BBA1;transition:color .2s;}
+    .footer-grid a:hover{color:var(--gold-light);}
+    .footer-brand p{font-size:14px;color:#9A8E75;max-width:34ch;}
+    .foot-contact li{font-size:13.5px;color:#C7BBA1;}
+    .footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:22px 0;flex-wrap:wrap;gap:12px;}
+    .footer-bottom small{color:#8A7E67;font-size:13px;}
+    .socials{display:flex;gap:14px;}
+    .socials a{width:36px;height:36px;border:1px solid #3E3421;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#C7BBA1;transition:border-color .2s, color .2s, transform .2s;}
+    .socials a:hover{border-color:var(--gold);color:var(--gold-light);transform:translateY(-2px);}
+
+    @media (max-width:960px){
+      .footer-grid{grid-template-columns:repeat(2,1fr);}
+      .section{padding:64px 0;}
+    }
+    @media (max-width:640px){
+      .footer-grid{grid-template-columns:1fr;gap:26px;}
+      .section{padding:52px 0;}
+      .footer-bottom{flex-direction:column;align-items:flex-start;}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{transition:none!important;animation:none!important;scroll-behavior:auto!important;}
+      .reveal{opacity:1;transform:none;}
+    }
+</style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">
+        <svg width="42" height="42" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <path d="M24 3 L43 10 V22 C43 33 35.5 41.5 24 45 C12.5 41.5 5 33 5 22 V10 Z" fill="#1B1712" stroke="#D9AE5F" stroke-width="1.5"/>
+          <path d="M16 18h16M16 24h12M16 30h9" stroke="#D9AE5F" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-text"><span class="b1">First State Bank</span><span class="b2">SINCE 2011</span></span>
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="services.html">Services</a>
+        <a href="faq.html">FAQs</a>
+        <a href="terms.html" class="active">Terms</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="header-cta">
+        <a class="btn btn-line" href="login.html">Login</a>
+        <a class="btn btn-gold" href="register.html">Open Account</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+      </div>
+    </div>
+  </header>
+  <div class="nav-backdrop" id="navBackdrop"></div>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Terms of Service</h1>
+      <p class="crumb">First State Bank</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container terms-body reveal" style="max-width:840px;">
+      <span class="terms-meta">Last updated: January 2026</span>
+
+      <h2>1. Acceptance of terms</h2>
+      <p>By accessing or using the First State Bank website, you agree to these Terms of Service. If you do not agree with any part of these terms, please do not continue to use the site.</p>
+
+      <h2>2. Eligibility</h2>
+      <p>You must be at least 18 years old to open an account or apply for any product described on this site. Certain products may carry additional eligibility requirements, which an advisor will confirm with you directly.</p>
+
+      <h2>3. Use of this website</h2>
+      <p>This website is provided for general information about First State Bank's products and services. Content here does not constitute a binding offer of credit or deposit terms &mdash; final terms are confirmed in writing once an application is reviewed.</p>
+
+      <h2>4. Account responsibilities</h2>
+      <p>You are responsible for:</p>
+      <ul>
+        <li>Keeping your login credentials and 4-digit payment code confidential</li>
+        <li>Ensuring the accuracy of the information you provide when opening an account</li>
+        <li>Promptly notifying us of any unauthorised activity on your account</li>
+        <li>Complying with all applicable laws in your jurisdiction</li>
+      </ul>
+
+      <h2>5. Accuracy of information</h2>
+      <p>We work to keep rates, fees and product details on this site current, but figures are subject to change. Always confirm current terms with an advisor before making a decision.</p>
+
+      <h2>6. Privacy</h2>
+      <p>Any information you share with us through this site is handled in line with our privacy practices and is not sold to third parties. See our support team for details on how specific information is used.</p>
+
+      <h2>7. Intellectual property</h2>
+      <p>The First State Bank name, logo and site content are the property of First State Bank and may not be reproduced without permission.</p>
+
+      <h2>8. Limitation of liability</h2>
+      <p>First State Bank is not liable for indirect or incidental damages arising from use of this website, to the extent permitted by law.</p>
+
+      <h2>9. Changes to these terms</h2>
+      <p>We may update these terms from time to time. Continued use of the site after changes are posted means you accept the revised terms.</p>
+
+      <h2>10. Contact</h2>
+      <p>Questions about these terms can be sent to hello@firststatebank.example or through our contact page.</p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" style="margin-bottom:14px;display:inline-flex;">
+            <svg width="42" height="42" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <path d="M24 3 L43 10 V22 C43 33 35.5 41.5 24 45 C12.5 41.5 5 33 5 22 V10 Z" fill="#1B1712" stroke="#D9AE5F" stroke-width="1.5"/>
+              <path d="M16 18h16M16 24h12M16 30h9" stroke="#D9AE5F" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="brand-text"><span class="b1">First State Bank</span><span class="b2">SINCE 2011</span></span>
+          </a>
+          <p>A community-rooted bank helping individuals, small businesses and corporates move money with confidence.</p>
+        </div>
+        <div><h5>QUICK LINKS</h5><ul><li><a href="register.html">Open Account</a></li><li><a href="login.html">Login</a></li></ul></div>
+        <div><h5>COMPANY</h5><ul><li><a href="about.html">About Us</a></li><li><a href="faq.html">FAQs</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+        <div><h5>SUPPORT</h5><ul><li><a href="contact.html">Contact</a></li><li><a href="faq.html">FAQs</a></li></ul></div>
+        <div><h5>GET IN TOUCH</h5><ul class="foot-contact"><li>118 Prairie View Road<br>Cedar Falls, IA 50613, USA</li><li>hello@firststatebank.example</li><li>+1 (319) 555-0148</li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <small>&copy; <span id="year">2026</span> First State Bank. All rights reserved.</small>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M12.5 6.2h-1.3c-.5 0-1 .5-1 1.1v1.4h2.3l-.3 2.2h-2v6.6H8v-6.6H6.3V8.7H8V7c0-1.8 1.2-3.4 3.2-3.4h1.3v2.6z" fill="#C7BBA1"/></svg></a>
+          <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M17 5.6c-.5.2-1 .4-1.6.5.6-.4 1-.9 1.2-1.6-.5.3-1.2.6-1.8.7a2.8 2.8 0 00-4.8 2.6 8 8 0 01-5.8-2.9 2.8 2.8 0 00.9 3.8c-.5 0-.9-.1-1.3-.3v.1a2.8 2.8 0 002.3 2.8c-.4.1-.8.2-1.3.1a2.8 2.8 0 002.6 2 5.7 5.7 0 01-4.2 1.2 8 8 0 004.3 1.3c5.2 0 8-4.3 8-8v-.4c.6-.4 1-1 1.4-1.6z" fill="#C7BBA1"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4.9 7.2H2.6V16h2.3V7.2zM3.8 3.2A1.4 1.4 0 102.4 4.6 1.4 1.4 0 003.8 3.2zM17.4 16h-2.3v-4.6c0-1.1 0-2.5-1.5-2.5s-1.8 1.2-1.8 2.4V16H9.5V7.2h2.2v1.2a2.5 2.5 0 012.3-1.3c2.4 0 2.9 1.6 2.9 3.7V16z" fill="#C7BBA1"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="2.5" y="2.5" width="15" height="15" rx="4" stroke="#C7BBA1" stroke-width="1.5" fill="none"/><circle cx="10" cy="10" r="3.6" stroke="#C7BBA1" stroke-width="1.5" fill="none"/><circle cx="14.2" cy="5.8" r="1" fill="#C7BBA1"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  document.getElementById('year').textContent = new Date().getFullYear();
+  var navToggle = document.getElementById('navToggle');
+  var mainNav = document.getElementById('mainNav');
+  var backdrop = document.getElementById('navBackdrop');
+  function closeNav(){ mainNav.classList.remove('open'); backdrop.classList.remove('show'); navToggle.classList.remove('active'); document.body.classList.remove('nav-open'); }
+  function openNav(){ mainNav.classList.add('open'); backdrop.classList.add('show'); navToggle.classList.add('active'); document.body.classList.add('nav-open'); }
+  navToggle.addEventListener('click', function(){ mainNav.classList.contains('open') ? closeNav() : openNav(); });
+  backdrop.addEventListener('click', closeNav);
+  mainNav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeNav); });
+  window.addEventListener('resize', function(){ if(window.innerWidth > 960) closeNav(); });
+  var header = document.querySelector('.site-header');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 20) header.classList.add('scrolled'); else header.classList.remove('scrolled');
+  }, {passive:true});
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else { revealEls.forEach(function(el){ el.classList.add('in'); }); }
+})();
+</script>
+</body>
+</html>
