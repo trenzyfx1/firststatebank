@@ -63,7 +63,7 @@ export const SITE_DEFAULTS = {
   personalInterest:        2,        // % per month
   corporateInterest:       3,        // % per month
   supportEmail:            "support@firststatebank.example",
-  supportPhone:            "+1 (319) 555-0148",
+  supportPhone:            "+44 (0) 7344 658784",
   maintenanceMode:         false
 };
 
