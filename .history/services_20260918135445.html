@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About Us | First State Bank</title>
-<meta name="description" content="The story behind First State Bank, our mission, and what makes our service different.">
+<title>Services | First State Bank</title>
+<meta name="description" content="Explore First State Bank's services: forex, agriculture finance, oil & gas, real estate, retirement, insurance and gold financing.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,8 +15,6 @@
       --gold:#B8862E;--gold-light:#D9AE5F;--gold-pale:#F1E4C6;
       --cream:#FBF7EE;--cream-2:#F2EAD6;--paper:#FFFFFF;
       --text:#2B2419;--muted:#77695A;--border:#E6DCC2;
-      --green:#2F7A4A;--green-pale:#E4F1E8;
-      --red:#B23A2E;--red-pale:#F7E4E1;
       --radius:2px;
       --shadow:0 18px 40px -22px rgba(27,23,18,0.35);
     }
@@ -32,7 +30,6 @@
     .container{max-width:1180px;margin:0 auto;padding:0 28px;}
     .eyebrow{display:inline-block;font-family:"Fraunces",serif;font-style:italic;font-size:15px;color:var(--gold);margin-bottom:10px;}
 
-    /* HEADER */
     header.site-header{position:sticky;top:0;z-index:100;background:var(--ink);border-bottom:1px solid var(--ink-3);transition:background .25s ease;}
     header.site-header.scrolled{background:rgba(27,23,18,.97);backdrop-filter:blur(8px);}
     .header-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1180px;margin:0 auto;transition:padding .25s ease;}
@@ -78,42 +75,34 @@
       .header-cta .btn-gold{padding:10px 16px;font-size:13px;}
     }
 
-    /* PAGE HERO */
     .page-hero{background:linear-gradient(160deg,#1B1712 0%,#2C2416 62%,#463823 100%);padding:76px 0 60px;text-align:center;position:relative;overflow:hidden;}
     .page-hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,rgba(217,174,95,.18) 1px,transparent 1px);background-size:22px 22px;opacity:.5;pointer-events:none;}
     .page-hero h1{color:#fff;font-size:clamp(32px,5vw,48px);margin-bottom:14px;position:relative;}
     .page-hero .crumb{position:relative;color:var(--gold-light);font-size:14px;letter-spacing:.06em;}
 
-    /* SECTIONS */
     .section{padding:88px 0;}
     .section-alt{background:var(--cream-2);}
     .section-head{max-width:640px;margin-bottom:48px;}
     .section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
     .section-head h2{font-size:clamp(26px,3.2vw,36px);}
 
-    .split{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:center;}
-    .split-img{position:relative;}
-    .split-img img{border-radius:var(--radius);box-shadow:var(--shadow);}
-    .split-img .ring{position:absolute;width:120px;height:120px;border:8px solid var(--gold-pale);border-radius:50%;top:-30px;right:-30px;z-index:-1;}
+    .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+    .service-card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);padding:34px 28px;transition:border-color .3s, transform .3s, box-shadow .3s;}
+    .service-card:hover{border-color:var(--gold);transform:translateY(-6px);box-shadow:var(--shadow);}
+    .service-card .ico{width:52px;height:52px;border-radius:50%;background:var(--ink);color:var(--gold-light);display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+    .service-card h3{font-size:19px;margin-bottom:8px;}
+    .service-card p{font-size:14.5px;margin-bottom:16px;}
+    .service-card a{font-size:13.5px;color:var(--gold);font-weight:600;border-bottom:1px solid var(--gold);padding-bottom:2px;transition:padding .2s;}
+    .service-card a:hover{padding-right:4px;}
 
-    .icon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px 44px;}
-    .icon-item{display:flex;gap:16px;transition:transform .25s;}
-    .icon-item:hover{transform:translateY(-3px);}
-    .icon-item .ico{flex:none;width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--gold-light);display:flex;align-items:center;justify-content:center;}
-    .icon-item h4{font-size:16px;margin-bottom:6px;}
-    .icon-item p{font-size:14px;margin:0;}
-
-    .tabs{display:flex;gap:26px;border-bottom:1px solid var(--border);margin:22px 0 16px;}
-    .tabs button{background:none;border:0;padding:0 0 12px;font-family:"Fraunces",serif;font-size:16px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s, border-color .2s;}
-    .tabs button.active{color:var(--ink);border-color:var(--gold);}
-    .tab-panel{display:none;font-size:15px;color:var(--muted);}
-    .tab-panel.active{display:block;animation:fadeUp .4s ease both;}
+    .cta-band{background:linear-gradient(120deg,#1B1712,#4A3B22);color:#fff;border-radius:var(--radius);padding:48px 56px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+    .cta-band h3{color:#fff;font-size:clamp(22px,2.6vw,28px);margin-bottom:6px;}
+    .cta-band p{color:#C7BBA1;margin:0;max-width:46ch;}
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
     .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease;}
     .reveal.in{opacity:1;transform:translateY(0);}
 
-    /* FOOTER */
     footer.site-footer{background:var(--ink);color:#C7BBA1;padding:64px 0 0;}
     .footer-grid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:30px;padding-bottom:48px;border-bottom:1px solid var(--ink-3);}
     .footer-grid h5{color:#fff;font-size:13px;letter-spacing:.08em;margin-bottom:18px;font-family:"Inter",sans-serif;}
@@ -129,16 +118,16 @@
     .socials a:hover{border-color:var(--gold);color:var(--gold-light);transform:translateY(-2px);}
 
     @media (max-width:960px){
-      .icon-grid{grid-template-columns:repeat(2,1fr);}
-      .split{grid-template-columns:1fr;gap:36px;}
-      .split-img .ring{width:80px;height:80px;top:-20px;right:-20px;}
+      .service-grid{grid-template-columns:repeat(2,1fr);}
       .footer-grid{grid-template-columns:repeat(2,1fr);}
       .section{padding:64px 0;}
+      .cta-band{padding:38px 30px;}
     }
     @media (max-width:640px){
-      .icon-grid{grid-template-columns:1fr;}
+      .service-grid{grid-template-columns:1fr;}
       .footer-grid{grid-template-columns:1fr;gap:26px;}
       .section{padding:52px 0;}
+      .cta-band{padding:30px 22px;flex-direction:column;align-items:flex-start;}
       .footer-bottom{flex-direction:column;align-items:flex-start;}
     }
     @media (prefers-reduced-motion:reduce){
@@ -160,8 +149,8 @@
       </a>
       <nav class="main-nav" id="mainNav">
         <a href="index.html">Home</a>
-        <a href="about.html" class="active">About Us</a>
-        <a href="services.html">Services</a>
+        <a href="about.html">About Us</a>
+        <a href="services.html" class="active">Services</a>
         <a href="faq.html">FAQs</a>
         <a href="terms.html">Terms</a>
         <a href="contact.html">Contact</a>
@@ -177,67 +166,66 @@
 
   <section class="page-hero">
     <div class="container">
-      <h1>About Us</h1>
+      <h1>Services</h1>
       <p class="crumb">First State Bank</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <div class="icon-grid reveal">
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M10 2s6 6.5 6 10.4A6 6 0 014 12.4C4 8.5 10 2 10 2z" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg></div><div><h4>Stable Banking</h4><p>Consistent service quality, free of the errors that come with rushed systems.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><path d="M2 10h16M10 2c2.5 2.4 2.5 13.6 0 16M10 2c-2.5 2.4-2.5 13.6 0 16" stroke="#D9AE5F" stroke-width="1.4" fill="none"/></svg></div><div><h4>Reliable System</h4><p>Our platform stays available and accessible wherever you are.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><rect x="4" y="9" width="12" height="8" rx="1.5" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><path d="M6.5 9V6.5a3.5 3.5 0 017 0V9" stroke="#D9AE5F" stroke-width="1.6" fill="none"/></svg></div><div><h4>Fully Secured</h4><p>Up-to-date protections keep every transaction and login safe.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M10 2l8 4.4H2L10 2z" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M3.5 8v7M8 8v7M12 8v7M16.5 8v7M2 17.5h16" stroke="#D9AE5F" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><h4>Loans</h4><p>Student, business and personal loan options with clear terms.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M3 11v-1a7 7 0 0114 0v1" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="2.3" y="11" width="3.4" height="5" rx="1.2" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><rect x="14.3" y="11" width="3.4" height="5" rx="1.2" stroke="#D9AE5F" stroke-width="1.6" fill="none"/></svg></div><div><h4>Reliable Customer Service</h4><p>Support that answers in seconds, not after a long hold.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M3 5.5A1.5 1.5 0 014.5 4h9A1.5 1.5 0 0115 5.5V6H4.5A1.5 1.5 0 013 4.5" stroke="#D9AE5F" stroke-width="1.4" fill="none"/><rect x="2" y="6" width="16" height="10" rx="1.6" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><circle cx="14" cy="11" r="1.2" fill="#D9AE5F"/></svg></div><div><h4>Personal Savings</h4><p>A safe place to store your money that keeps earning while it sits.</p></div></div>
+      <div class="section-head center reveal">
+        <p class="eyebrow">Our Services</p>
+        <h2>Financing built around your industry</h2>
       </div>
-    </div>
-  </section>
-
-  <section class="section section-alt">
-    <div class="container split">
-      <div class="split-img reveal">
-        <div class="ring"></div>
-        <img src="https://images.unsplash.com/photo-1713947506697-4bdb5b85ef17?auto=format&fit=crop&w=1200&q=70" alt="First State Bank team member">
-      </div>
-      <div class="reveal">
-        <h2>About Us</h2>
-        <p>A few years ago, a small team set out to make banking feel less like a queue and more like a relationship. That work became First State Bank. Today we're a fully licensed bank with tools for tracking spending, saving more and making the right money moves &mdash; without overcharging you for the privilege.</p>
-        <p>Wherever you are and whatever stage your business is at, we're built to make the day-to-day parts of banking easier, so you can spend your time on everything else.</p>
-        <div class="tabs">
-          <button class="active" data-tab="mission2">Our Mission</button>
-          <button data-tab="vision2">Our Vision</button>
+      <div class="service-grid">
+        <div class="service-card reveal">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M2 14l5-6 4 3 6-7" stroke="#D9AE5F" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4h4v4" stroke="#D9AE5F" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Forex</h3>
+          <p>Currency exchange and international payment support for travellers and businesses trading abroad.</p>
+          <a href="contact.html">Talk to an advisor &rarr;</a>
         </div>
-        <div class="tab-panel active" id="mission2"><p>To give every customer a safe, unique and secure platform for their everyday finances, backed by an infrastructure built for convenience.</p></div>
-        <div class="tab-panel" id="vision2"><p>To be recognised as the bank that treats every customer &mdash; regardless of size &mdash; like a long-term relationship, not a transaction.</p></div>
+        <div class="service-card reveal">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M4 16c-1-6 2-12 12-12 1 8-4 12-12 12z" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M4 16c3-4 6-6 10-8" stroke="#D9AE5F" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg></div>
+          <h3>Agriculture Finance</h3>
+          <p>Seasonal and equipment financing built around the realities of a farming calendar.</p>
+          <a href="contact.html">Talk to an advisor &rarr;</a>
+        </div>
+        <div class="service-card reveal">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M10 2s6 6.5 6 10.4A6 6 0 014 12.4C4 8.5 10 2 10 2z" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg></div>
+          <h3>Oil &amp; Gas Financing</h3>
+          <p>Working capital and project finance for operators across the energy supply chain.</p>
+          <a href="contact.html">Talk to an advisor &rarr;</a>
+        </div>
+        <div class="service-card reveal">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M3 9.5L10 4l7 5.5" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 8.5V17h10V8.5" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Real Estate Loans</h3>
+          <p>Mortgage and property financing with terms that are explained before you sign, not after.</p>
+          <a href="contact.html">Talk to an advisor &rarr;</a>
+        </div>
+        <div class="service-card reveal">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M10 17s-6.5-4-6.5-9A3.8 3.8 0 0110 5.5 3.8 3.8 0 0116.5 8c0 5-6.5 9-6.5 9z" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg></div>
+          <h3>Retirement &amp; Insurance</h3>
+          <p>Retirement savings plans and insurance products to protect what you've built.</p>
+          <a href="contact.html">Talk to an advisor &rarr;</a>
+        </div>
+        <div class="service-card reveal">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><path d="M8 8.3c0-1 .9-1.5 2-1.5s2 .5 2 1.4c0 2-4 1.4-4 3.3 0 .9.9 1.5 2 1.5s2-.5 2-1.5M10 6v1M10 13v1" stroke="#D9AE5F" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></div>
+          <h3>Gold &amp; Commodities</h3>
+          <p>Financing and safekeeping options for customers holding gold and other commodities.</p>
+          <a href="contact.html">Talk to an advisor &rarr;</a>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container" style="max-width:840px;">
-      <h2 class="reveal">A brief history about us</h2>
-      <p class="reveal">First State Bank was founded in 2011 by a group of community-minded bankers who saw the need for accessible financial services for individuals and small businesses that larger banks tended to overlook. They believed that by offering approachable loans and everyday accounts, they could support local economic growth.</p>
-      <p class="reveal">In the early days, First State Bank focused on small loans for local entrepreneurs. Demand quickly outpaced a single branch, and new locations followed in neighbouring cities.</p>
-      <p class="reveal">As the bank grew, the product range widened to include savings accounts, insurance and money transfers, alongside mobile banking that made it easier for customers to reach us from anywhere.</p>
-      <p class="reveal">A growth investment in 2015 allowed the bank to expand into new markets while keeping the branch-level relationships that customers had come to expect. First State Bank has stayed guided by that same mission ever since: helping people and businesses bank on their own terms.</p>
     </div>
   </section>
 
   <section class="section section-alt">
     <div class="container">
-      <div class="section-head center reveal">
-        <p class="eyebrow">Why Us</p>
-        <h2>Here's what makes us different</h2>
-      </div>
-      <div class="icon-grid reveal">
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="11" rx="1.6" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><path d="M2 8.5h16" stroke="#D9AE5F" stroke-width="1.6"/></svg></div><div><h4>Multiple Payment Options</h4><p>Cards, bank transfers and mobile payments, all supported.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><path d="M2 10h16M10 2c2.5 2.4 2.5 13.6 0 16M10 2c-2.5 2.4-2.5 13.6 0 16" stroke="#D9AE5F" stroke-width="1.4" fill="none"/></svg></div><div><h4>Nationwide Coverage</h4><p>Branch and partner access across the country.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><path d="M8 8.3c0-1 .9-1.5 2-1.5s2 .5 2 1.4c0 2-4 1.4-4 3.3 0 .9.9 1.5 2 1.5s2-.5 2-1.5M10 6v1M10 13v1" stroke="#D9AE5F" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></div><div><h4>Low Transaction Fees</h4><p>Clear, published pricing for every customer.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><rect x="4" y="9" width="12" height="8" rx="1.5" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><path d="M6.5 9V6.5a3.5 3.5 0 017 0V9" stroke="#D9AE5F" stroke-width="1.6" fill="none"/></svg></div><div><h4>Secured Transactions</h4><p>Advanced technology protects you against digital theft.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 3v5c0 5-3.2 8-7 9-3.8-1-7-4-7-9V5l7-3z" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg></div><div><h4>Strong Security</h4><p>Layered protection built around real-world risks.</p></div></div>
-        <div class="icon-item"><div class="ico"><svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M3 11v-1a7 7 0 0114 0v1" stroke="#D9AE5F" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="2.3" y="11" width="3.4" height="5" rx="1.2" stroke="#D9AE5F" stroke-width="1.6" fill="none"/><rect x="14.3" y="11" width="3.4" height="5" rx="1.2" stroke="#D9AE5F" stroke-width="1.6" fill="none"/></svg></div><div><h4>24/7 Support</h4><p>Our team is available around the clock, every day.</p></div></div>
+      <div class="cta-band reveal">
+        <div>
+          <h3>Not sure which service fits?</h3>
+          <p>Tell us about your goals and an advisor will point you to the right product.</p>
+        </div>
+        <a class="btn btn-gold" href="contact.html">Contact Us <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="#1B1712" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </div>
   </section>
@@ -258,7 +246,7 @@
         <div><h5>QUICK LINKS</h5><ul><li><a href="register.html">Open Account</a></li><li><a href="login.html">Login</a></li></ul></div>
         <div><h5>COMPANY</h5><ul><li><a href="about.html">About Us</a></li><li><a href="faq.html">FAQs</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
         <div><h5>SUPPORT</h5><ul><li><a href="contact.html">Contact</a></li><li><a href="faq.html">FAQs</a></li></ul></div>
-        <div><h5>GET IN TOUCH</h5><ul class="foot-contact"><li>118 Prairie View Road<br>Cedar Falls, IA 50613, USA</li><li>Firststatebank04@gmail.com</li><li>+44 (0) 7344 658784</li></ul></div>
+        <div><h5>GET IN TOUCH</h5><ul class="foot-contact"><li>118 Prairie View Road<br>Cedar Falls, IA 50613, USA</li><li>support@firststatebank.uk</li><li>+44 (0) 7344 658784</li></ul></div>
       </div>
       <div class="footer-bottom">
         <small>&copy; <span id="year">2026</span> First State Bank. All rights reserved.</small>
@@ -275,38 +263,22 @@
 <script>
 (function(){
   "use strict";
-  var yearEl = document.getElementById('year');
-  if(yearEl) yearEl.textContent = new Date().getFullYear();
+  document.getElementById('year').textContent = new Date().getFullYear();
 
   var navToggle = document.getElementById('navToggle');
   var mainNav = document.getElementById('mainNav');
   var backdrop = document.getElementById('navBackdrop');
-  function closeNav(){ mainNav.classList.remove('open'); backdrop.classList.remove('show'); navToggle.classList.remove('active'); navToggle.setAttribute('aria-expanded','false'); document.body.classList.remove('nav-open'); }
-  function openNav(){ mainNav.classList.add('open'); backdrop.classList.add('show'); navToggle.classList.add('active'); navToggle.setAttribute('aria-expanded','true'); document.body.classList.add('nav-open'); }
-  if(navToggle) navToggle.addEventListener('click', function(){ mainNav.classList.contains('open') ? closeNav() : openNav(); });
-  if(backdrop) backdrop.addEventListener('click', closeNav);
-  if(mainNav) mainNav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeNav); });
+  function closeNav(){ mainNav.classList.remove('open'); backdrop.classList.remove('show'); navToggle.classList.remove('active'); document.body.classList.remove('nav-open'); }
+  function openNav(){ mainNav.classList.add('open'); backdrop.classList.add('show'); navToggle.classList.add('active'); document.body.classList.add('nav-open'); }
+  navToggle.addEventListener('click', function(){ mainNav.classList.contains('open') ? closeNav() : openNav(); });
+  backdrop.addEventListener('click', closeNav);
+  mainNav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeNav); });
   window.addEventListener('resize', function(){ if(window.innerWidth > 960) closeNav(); });
 
   var header = document.querySelector('.site-header');
   window.addEventListener('scroll', function(){
     if(window.scrollY > 20) header.classList.add('scrolled'); else header.classList.remove('scrolled');
   }, {passive:true});
-
-  document.querySelectorAll('.tabs').forEach(function(tabset){
-    var btns = tabset.querySelectorAll('button');
-    btns.forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var target = btn.getAttribute('data-tab');
-        var wrap = tabset.parentElement;
-        wrap.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
-        var panel = wrap.querySelector('#'+target);
-        if(panel) panel.classList.add('active');
-        btns.forEach(function(b){ b.classList.remove('active'); });
-        btn.classList.add('active');
-      });
-    });
-  });
 
   var revealEls = document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window){
