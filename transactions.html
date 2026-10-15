@@ -301,14 +301,15 @@
 <div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Done</span></div>
 
 <script type="module">
-import { app, auth, db, ADMIN_EMAIL } from "./firebase-config.js";
+import { auth, db, ADMIN_EMAIL } from "./firebase-config.js";
 import { onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, getDoc, collection, query, where, orderBy, getDocs }
+import { doc, getDoc, collection, query, where, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 var ALL_TX = [];
 var CURRENT_UID = null;
+var unsubTx = null;
 var state = { search:"", type:"", status:"", dir:"", page:1, perPage:8 };
 
 /* ---------- HELPERS ---------- */
@@ -317,6 +318,13 @@ function fmtUSD(n){
   return sign + "$" + Math.abs(n).toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 function initials(name){ return (name || "?").split(" ").map(function(s){ return s[0]; }).slice(0,2).join("").toUpperCase(); }
+function tsToMs(ts){
+  if(!ts) return 0;
+  if(ts.toMillis) return ts.toMillis();
+  if(ts.seconds) return ts.seconds * 1000;
+  var d = new Date(ts);
+  return isNaN(d) ? 0 : d.getTime();
+}
 function fmtDate(s){
   if(!s) return "—";
   var d = s.toDate ? s.toDate() : new Date(s);
@@ -378,17 +386,18 @@ function getFiltered(){
   });
 }
 
-/* ---------- DECORATE (give dummy name/sub if missing) ---------- */
+/* ---------- DECORATE ---------- */
 function decorate(t){
   if(!t.name){
     if(t.type === "transfer") t.name = (t.amount > 0 ? "Transfer received" : "Transfer to " + (t.recipientName || "recipient"));
     else if(t.type === "withdrawal") t.name = "Withdrawal";
     else if(t.type === "deposit") t.name = "Deposit";
+    else if(t.type === "adjustment") t.name = (t.amount > 0 ? "Balance added by admin" : "Balance adjusted by admin");
     else t.name = "Transaction";
   }
   if(!t.sub){
     if(t.type === "transfer") t.sub = t.recipientBank ? (t.recipientBank + " • " + (t.recipientAccount || "").slice(-4)) : "";
-    else if(t.type === "withdrawal") t.sub = t.bank || "";
+    else if(t.type === "withdrawal") t.sub = t.bank ? (t.bank + " • " + (t.accountNumber || "").slice(-4)) : "";
     else t.sub = "";
   }
   return t;
@@ -520,21 +529,35 @@ document.getElementById("exportBtn").addEventListener("click", function(){
   showToast("CSV downloaded");
 });
 
-/* ---------- LOAD ---------- */
-async function loadTransactions(uid){
+/* ---------- LIVE LISTENER ---------- */
+function attachListener(uid){
+  if(unsubTx) unsubTx();
+  /* NO orderBy in the query — sorts in JS instead, so no composite index needed */
   var q = query(
     collection(db, "transactions"),
-    where("uid", "==", uid),
-    orderBy("createdAt", "desc")
+    where("uid", "==", uid)
   );
-  var snap = await getDocs(q);
-  ALL_TX = [];
-  snap.forEach(function(d){
-    var data = d.data();
-    data.id = d.id;
-    ALL_TX.push(decorate(data));
-  });
-  render();
+  unsubTx = onSnapshot(q,
+    function(snap){
+      ALL_TX = [];
+      snap.forEach(function(d){
+        var data = d.data();
+        data.id = d.id;
+        ALL_TX.push(decorate(data));
+      });
+      /* Sort newest first */
+      ALL_TX.sort(function(a, b){
+        return tsToMs(b.createdAt) - tsToMs(a.createdAt);
+      });
+      render();
+    },
+    function(err){
+      console.error("Firestore listener failed:", err.message);
+      showToast("Could not load transactions: " + err.message);
+      ALL_TX = [];
+      render();
+    }
+  );
 }
 
 /* ---------- AUTH ---------- */
@@ -550,13 +573,7 @@ onAuthStateChanged(auth, async function(user){
     document.getElementById("userAv").textContent = initials(u.fullName);
   }
 
-  try {
-    await loadTransactions(user.uid);
-  } catch(err){
-    console.warn("Load failed:", err.message);
-    ALL_TX = [];
-    render();
-  }
+  attachListener(user.uid);
 });
 </script>
 </body>
