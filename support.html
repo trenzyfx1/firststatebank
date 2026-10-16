@@ -158,6 +158,7 @@
     .toast.ok .dot{background:#8CD49B;}
     .toast.err .dot{background:var(--red);}
 </style>
+<link rel="stylesheet" href="live-chat.css">
 </head>
 <body>
 
@@ -397,7 +398,7 @@ async function loadTickets(uid){
 
 /* Auth guard */
 onAuthStateChanged(auth, async function(user){
-  if(!user){ window.location.href = "login.html"; return; }
+  if(!user || user.isAnonymous){ window.location.href = "login.html"; return; }
   if(user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){ window.location.href = "admin.html"; return; }
   CURRENT_UID = user.uid;
   var snap = await getDoc(doc(db, "users", user.uid));
@@ -491,5 +492,7 @@ document.getElementById("ticketForm").addEventListener("submit", async function(
   btn.textContent = "Send Message";
 });
 </script>
+
+<script type="module" src="live-chat.js" data-chat-mode="signed-in"></script>
 </body>
 </html>

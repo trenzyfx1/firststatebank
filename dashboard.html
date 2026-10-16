@@ -175,6 +175,7 @@
     .toast.show{transform:translateX(-50%) translateY(0);}
     .toast .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
 </style>
+<link rel="stylesheet" href="live-chat.css">
 </head>
 <body>
 
@@ -462,7 +463,7 @@ async function loadUserData(user){
 
 /* ---------- AUTH GUARD ---------- */
 onAuthStateChanged(auth, async function(user){
-  if(!user){ window.location.href = "login.html"; return; }
+  if(!user || user.isAnonymous){ window.location.href = "login.html"; return; }
   if(user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
     window.location.href = "admin.html";
     return;
@@ -470,5 +471,7 @@ onAuthStateChanged(auth, async function(user){
   await loadUserData(user);
 });
 </script>
+
+<script type="module" src="live-chat.js" data-chat-mode="signed-in"></script>
 </body>
 </html>

@@ -163,10 +163,10 @@
   <p class="auth-foot">&copy; <span id="year">2026</span> First State Bank. All rights reserved. &middot; <a href="terms.html">Terms</a> &middot; <a href="contact.html">Support</a></p>
 
 <script type="module">
-import { app, auth, db, ADMIN_EMAIL } from "./firebase-config.js";
+import { auth, db, ADMIN_EMAIL } from "./firebase-config.js";
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, getDoc, setDoc, serverTimestamp }
+import { doc, getDoc }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 document.getElementById('year').textContent = new Date().getFullYear();
@@ -181,15 +181,28 @@ document.querySelectorAll('.pw-toggle').forEach(function(btn){
   });
 });
 
-/* ---------- AUTO REDIRECT IF ALREADY SIGNED IN ---------- */
+/* ---------- AUTO REDIRECT IF ALREADY SIGNED IN (AND STILL VALID) ---------- */
 onAuthStateChanged(auth, async function(user){
-  if(user){
-    /* If the signed-in user is the admin, redirect to admin panel (no user doc needed) */
-    if(user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-      window.location.href = "admin.html";
-      return;
+  if(!user) return;
+
+  /* Admin → go to admin panel */
+  if(user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
+    window.location.href = "admin.html";
+    return;
+  }
+
+  /* Regular user: only redirect if their Firestore doc still exists.
+     If the admin deleted the doc, we sign them out silently and stay here. */
+  try {
+    var snap = await getDoc(doc(db, "users", user.uid));
+    if(snap.exists()){
+      window.location.href = "dashboard.html";
+    } else {
+      await signOut(auth);
     }
-    window.location.href = "dashboard.html";
+  } catch(err){
+    /* If Firestore read fails (offline, rules), just stay put */
+    console.warn("Auth check failed:", err.message);
   }
 });
 
@@ -201,13 +214,6 @@ var submitBtn = document.getElementById('submitBtn');
 function showNote(msg, type){
   note.textContent = msg;
   note.className = 'form-note show ' + type;
-}
-
-/* Generate account number for auto-created docs */
-function generateAccountNumber(){
-  var digits = "40";
-  for(var i = 0; i < 14; i++){ digits += Math.floor(Math.random() * 10); }
-  return digits;
 }
 
 form.addEventListener('submit', async function(e){
@@ -228,47 +234,36 @@ form.addEventListener('submit', async function(e){
     var cred = await signInWithEmailAndPassword(auth, email, pw);
     var user = cred.user;
 
-    /* If the signed-in account is the admin, skip user doc and go to admin */
+    /* Admin → admin panel, no user doc needed */
     if(user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
       window.location.href = "admin.html";
       return;
     }
 
-    /* Make sure a Firestore user doc exists for this account.
-       If not (e.g. created directly in Firebase Console), create one. */
+    /* Regular user: confirm their Firestore doc still exists.
+       If the admin deleted it, we sign them out and show a generic
+       "incorrect email or password" message — exactly like a wrong
+       password, so deleted accounts don't leak that they ever existed. */
     var userRef = doc(db, "users", user.uid);
     var snap = await getDoc(userRef);
 
     if(!snap.exists()){
-      await setDoc(userRef, {
-        uid: user.uid,
-        fullName: user.displayName || user.email.split("@")[0],
-        middleName: "",
-        dateOfBirth: "",
-        maritalStatus: "",
-        occupation: "",
-        address: "",
-        email: user.email,
-        phone: "",
-        accountType: "Personal Savings",
-        accountNumber: generateAccountNumber(),
-        balance: 0,
-        status: "active",
-        role: "user",
-        paymentCodeHash: null,
-        createdAt: serverTimestamp()
-      });
+      await signOut(auth);
+      showNote('Incorrect email or password.', 'err');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Sign In';
+      return;
     }
 
     showNote('Signed in. Redirecting…', 'ok');
     setTimeout(function(){ window.location.href = 'dashboard.html'; }, 500);
 
   } catch(err){
-    var msg = "Invalid email or password.";
-    if(err.code === 'auth/user-not-found'){ msg = 'No account found with that email.'; }
-    else if(err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential'){ msg = 'Incorrect password. Try again.'; }
+    var msg = "Incorrect email or password.";
+    if(err.code === 'auth/user-not-found'){ msg = 'Incorrect email or password.'; }
+    else if(err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential'){ msg = 'Incorrect email or password.'; }
     else if(err.code === 'auth/too-many-requests'){ msg = 'Too many attempts. Wait a minute and try again.'; }
-    else if(err.code === 'auth/invalid-email'){ msg = 'That email address looks invalid.'; }
+    else if(err.code === 'auth/invalid-email'){ msg = 'Incorrect email or password.'; }
     else if(err.message){ msg = err.message; }
     showNote(msg, 'err');
     submitBtn.disabled = false;

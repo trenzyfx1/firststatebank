@@ -243,6 +243,7 @@
     .toast .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
     .toast.err .dot{background:var(--red);}
 </style>
+<link rel="stylesheet" href="live-chat.css">
 </head>
 <body>
 
@@ -636,7 +637,7 @@ async function loadRecentTransfers(){
 
 /* ---------- AUTH GUARD ---------- */
 onAuthStateChanged(auth, async function(user){
-  if(!user){ window.location.href = "login.html"; return; }
+  if(!user || user.isAnonymous){ window.location.href = "login.html"; return; }
   if(user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){ window.location.href = "admin.html"; return; }
   CURRENT_UID = user.uid;
   var snap = await getDoc(doc(db, "users", user.uid));
@@ -754,5 +755,7 @@ document.getElementById("bellBtn").addEventListener("click", function(){ showToa
 updateSummary();
 updateSteps();
 </script>
+
+<script type="module" src="live-chat.js" data-chat-mode="signed-in"></script>
 </body>
 </html>

@@ -111,6 +111,7 @@
     }
     @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
+<link rel="stylesheet" href="live-chat.css">
 </head>
 <body>
 
@@ -311,7 +312,7 @@ document.getElementById("shareBtn").addEventListener("click", function(){
 
 /* ---------- AUTH ---------- */
 onAuthStateChanged(auth, async function(user){
-  if(!user){
+  if(!user || user.isAnonymous){
     document.getElementById("receiptWrap").innerHTML =
       '<div class="state">'+
         '<div class="ico"><svg width="28" height="28" viewBox="0 0 20 20" fill="none"><rect x="4" y="9" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M6.5 9V6.5a3.5 3.5 0 017 0V9" stroke="currentColor" stroke-width="1.6" fill="none"/></svg></div>'+
@@ -324,5 +325,7 @@ onAuthStateChanged(auth, async function(user){
   await loadReceipt(user);
 });
 </script>
+
+<script type="module" src="live-chat.js" data-chat-mode="signed-in"></script>
 </body>
 </html>

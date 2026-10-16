@@ -1,0 +1,144 @@
+/* First State Bank live chat widget */
+
+/* LAUNCHER — always visible, never toggled by stray classes */
+#fs-chat-launcher {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 9998;
+  border: 0;
+  border-radius: 999px;
+  background: #1b1712;
+  color: #fff;
+  padding: 14px 18px;
+  box-shadow: 0 8px 28px #0003;
+  display: flex !important;
+  gap: 10px;
+  align-items: center;
+  font: 600 14px Inter, Arial, sans-serif;
+  cursor: pointer;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#fs-chat-launcher .fs-chat-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d9ae5f;
+}
+
+/* PANEL — hidden by default, only shown with .fs-open */
+#fs-chat-panel {
+  position: fixed;
+  right: 22px;
+  bottom: 82px;
+  width: min(360px, calc(100vw - 28px));
+  height: min(500px, calc(100vh - 115px));
+  z-index: 9999;
+  background: #fff;
+  border: 1px solid #e6dcc2;
+  border-radius: 14px;
+  box-shadow: 0 18px 60px #0003;
+  display: none;
+  overflow: hidden;
+  font: 14px Inter, Arial, sans-serif;
+  color: #2b2419;
+}
+
+#fs-chat-panel.fs-open {
+  display: flex;
+  flex-direction: column;
+}
+
+.fs-chat-head {
+  background: #1b1712;
+  color: #fff;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.fs-chat-head strong { display: block; font-size: 14px; }
+.fs-chat-head small  { display: block; color: #d9ae5f; margin-top: 4px; font-size: 11px; }
+
+#fs-chat-close {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+#fs-chat-messages {
+  padding: 14px;
+  flex: 1;
+  overflow: auto;
+  background: #fbf7ee;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.fs-chat-msg {
+  max-width: 85%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.fs-chat-msg.fs-user  { align-self: flex-end;   background: #1b1712; color: #fff; border-bottom-right-radius: 3px; }
+.fs-chat-msg.fs-admin { align-self: flex-start; background: #fff; border: 1px solid #e6dcc2; border-bottom-left-radius: 3px; }
+.fs-chat-time { display: block; font-size: 10px; opacity: .65; margin-top: 5px; }
+
+#fs-chat-form {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid #eee5d2;
+  background: #fff;
+}
+
+#fs-chat-input {
+  min-width: 0;
+  flex: 1;
+  resize: none;
+  border: 1px solid #ddd2ba;
+  border-radius: 9px;
+  padding: 10px;
+  font: 14px Inter, Arial, sans-serif;
+  max-height: 90px;
+}
+
+#fs-chat-send {
+  border: 0;
+  border-radius: 9px;
+  background: #b8862e;
+  color: #fff;
+  padding: 0 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+#fs-chat-send:disabled { opacity: .55; cursor: wait; }
+
+.fs-chat-note {
+  padding: 8px 14px;
+  font-size: 11px;
+  color: #77695a;
+  background: #fff;
+  border-top: 1px solid #f1eadb;
+}
+
+@media (max-width: 480px) {
+  #fs-chat-launcher { right: 14px; bottom: 14px; padding: 13px 15px; }
+  #fs-chat-panel {
+    right: 10px;
+    bottom: 72px;
+    width: calc(100vw - 20px);
+    height: min(520px, calc(100vh - 95px));
+  }
+}

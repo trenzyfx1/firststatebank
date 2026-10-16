@@ -1612,6 +1612,16 @@
     .toast.err .dot {
       background: var(--red);
     }
+  
+    .chat-admin-layout{display:grid;grid-template-columns:minmax(220px,32%) minmax(0,1fr);gap:16px;min-height:420px}
+    .chat-admin-list,.chat-admin-thread{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-width:0}
+    .chat-admin-list h3,.chat-admin-thread h3{padding:15px;margin:0;border-bottom:1px solid var(--border);font-size:14px}
+    .chat-admin-convo{display:block;width:100%;text-align:left;padding:13px 14px;border:0;border-bottom:1px solid var(--border);background:transparent;cursor:pointer;color:var(--ink)}
+    .chat-admin-convo.active{background:var(--cream-2)}.chat-admin-convo strong{display:block;font-size:13px}.chat-admin-convo small{display:block;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}.chat-admin-convo span{display:block;font-size:12px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+    .chat-admin-messages{height:310px;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:9px;background:#fbf7ee}.chat-admin-bubble{max-width:85%;padding:10px 12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.5}.chat-admin-bubble.user{align-self:flex-start;background:#fff;border:1px solid var(--border)}.chat-admin-bubble.admin{align-self:flex-end;background:var(--ink);color:#fff}.chat-admin-bubble small{display:block;opacity:.65;font-size:10px;margin-top:5px}
+    .chat-admin-reply{display:flex;gap:8px;padding:12px;border-top:1px solid var(--border)}.chat-admin-reply textarea{flex:1;min-width:0;resize:vertical;min-height:42px;border:1px solid var(--border);padding:10px;font:inherit}.chat-admin-reply button{border:0;background:var(--gold);color:#fff;font-weight:700;padding:0 16px;cursor:pointer}.chat-admin-empty{padding:18px;color:var(--muted);font-size:13px}
+    @media(max-width:760px){.chat-admin-layout{grid-template-columns:1fr}.chat-admin-list{max-height:250px;overflow:auto}.chat-admin-messages{height:260px}}
+
   </style>
 </head>
 
@@ -1724,6 +1734,10 @@
           Create User Account
         </div>
 
+        <a class="side-link" data-view="live-chat">
+          <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 4.5h14v9H8l-4 3v-3H3v-9z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M6 8h8M6 10.5h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Live Chat <span class="count" id="liveChatCount">0</span>
+        </a>
         <div class="side-sep"></div>
         <div class="side-title">Transactions</div>
         <a class="side-link" data-view="tx-all">
@@ -2012,7 +2026,7 @@
     import { auth, db, ADMIN_EMAIL } from "./firebase-config.js";
     import { onAuthStateChanged, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, getDocs, where, deleteDoc }
+    import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc, serverTimestamp, getDocs, where, deleteDoc, limit }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     /* ---------- ELEMENT REFS ---------- */
@@ -2025,7 +2039,9 @@
     var USERS = [];
     var TX = [];
     var state = { view: "overview", search: "", statusFilter: "", typeFilter: "", currentUser: null };
-    var unsubUsers = null, unsubTx = null;
+    var unsubUsers = null, unsubTx = null, unsubLiveChats = null, unsubActiveChat = null;
+    var LIVE_CHATS = [];
+    var activeChatId = null;
     var pendingAuthAction = null;
 
     /* ---------- HELPERS ---------- */
@@ -2108,6 +2124,8 @@
       if (!confirm("Sign out of the admin panel?")) return;
       if (unsubUsers) unsubUsers();
       if (unsubTx) unsubTx();
+      if (unsubLiveChats) unsubLiveChats();
+      if (unsubActiveChat) unsubActiveChat();
       await signOut(auth);
     });
 
@@ -2126,6 +2144,12 @@
       wireModal();
       wireAuthModal();
       wireDeleteModal();
+      unsubLiveChats = onSnapshot(query(collection(db, "liveChats"), orderBy("updatedAt", "desc"), limit(100)), function(snap){
+        LIVE_CHATS = [];
+        snap.forEach(function(d){ var data=d.data(); data.id=d.id; LIVE_CHATS.push(data); });
+        var countEl=document.getElementById("liveChatCount"); if(countEl) countEl.textContent=LIVE_CHATS.length;
+        if(state.view === "live-chat") renderLiveChat();
+      }, function(err){ console.error("Live chat inbox listener:",err); showToast("Could not load live chat inbox.", "error"); });
 
       unsubUsers = onSnapshot(
         query(collection(db, "users"), orderBy("createdAt", "desc")),
@@ -2248,6 +2272,7 @@
       else if (state.view === "users") { t.textContent = "All Users"; s.textContent = "Every registered account."; }
       else if (state.view === "tx-all") { t.textContent = "All Transactions"; s.textContent = "Every transaction across all users."; }
       else if (state.view === "tx-pending") { t.textContent = "Pending Approvals"; s.textContent = "Transactions awaiting your review."; }
+      else if (state.view === "live-chat") { t.textContent = "Live Chat"; s.textContent = "Reply to website visitors from this dashboard."; }
     }
 
     /* ================================================================
@@ -2268,8 +2293,47 @@
        RENDER
        ================================================================ */
     function render() {
-      if (state.view === "tx-all" || state.view === "tx-pending") { renderTxView(); }
+      if (state.view === "live-chat") { renderLiveChat(); }
+      else if (state.view === "tx-all" || state.view === "tx-pending") { renderTxView(); }
       else { renderUsers(); }
+    }
+
+    /* ================================================================
+       LIVE CHAT INBOX
+       ================================================================ */
+    function chatTime(value){ if(!value) return ""; var d=value.toDate?value.toDate():new Date(value); return isNaN(d)?"":d.toLocaleString(); }
+    function renderLiveChat(){
+      var wrap=document.getElementById("tableWrap"); if(!wrap) return;
+      var selected=LIVE_CHATS.find(function(c){return c.id===activeChatId;});
+      wrap.innerHTML='<div class="chat-admin-layout"><section class="chat-admin-list"><h3>Conversations ('+LIVE_CHATS.length+')</h3><div id="liveChatConversations"></div></section><section class="chat-admin-thread"><h3 id="liveChatThreadTitle">'+(selected?escapeChatText(selected.ownerName||selected.ownerEmail||"Website visitor"):'Select a conversation')+'</h3><div class="chat-admin-messages" id="liveChatMessages"><div class="chat-admin-empty">Choose a conversation to read and reply.</div></div><form class="chat-admin-reply" id="liveChatReplyForm"><textarea id="liveChatReplyText" maxlength="1500" placeholder="Write a reply…" required '+(selected?'':'disabled')+'></textarea><button type="submit" '+(selected?'':'disabled')+'>Reply</button></form></section></div>';
+      var list=document.getElementById("liveChatConversations");
+      if(!LIVE_CHATS.length) list.innerHTML='<div class="chat-admin-empty">No messages yet. New website chats will appear here.</div>';
+      LIVE_CHATS.forEach(function(c){
+        var b=document.createElement("button"); b.type="button"; b.className="chat-admin-convo"+(c.id===activeChatId?" active":"");
+        var name=document.createElement("strong"); name.textContent=c.ownerName||c.ownerEmail||"Website visitor";
+        var email=document.createElement("small"); email.textContent=c.ownerEmail|| (c.isAnonymous?"Guest visitor":"Website visitor");
+        var last=document.createElement("span"); last.textContent=c.lastMessage||"No messages yet";
+        b.append(name,email,last); b.addEventListener("click",function(){activeChatId=c.id;renderLiveChat();watchAdminChat(c.id);}); list.append(b);
+      });
+      document.getElementById("liveChatReplyForm").addEventListener("submit",async function(e){
+        e.preventDefault(); var text=document.getElementById("liveChatReplyText").value.trim(); if(!text||!activeChatId)return;
+        var btn=this.querySelector("button");btn.disabled=true;
+        try{await addDoc(collection(db,"liveChats",activeChatId,"messages"),{text:text,senderUid:auth.currentUser.uid,senderRole:"admin",createdAt:serverTimestamp()});await updateDoc(doc(db,"liveChats",activeChatId),{updatedAt:serverTimestamp(),lastMessage:text,status:"open"});document.getElementById("liveChatReplyText").value="";}
+        catch(err){console.error(err);showToast("Reply failed: "+(err.message||"unknown error"),"error");}
+        finally{btn.disabled=false;}
+      });
+      if(activeChatId) watchAdminChat(activeChatId);
+    }
+    function escapeChatText(s){return String(s||"").replace(/[&<>"']/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];});}
+    function watchAdminChat(id){
+      if(unsubActiveChat) unsubActiveChat();
+      var messages=document.getElementById("liveChatMessages"); if(!messages)return;
+      messages.innerHTML='<div class="chat-admin-empty">Loading messages…</div>';
+      unsubActiveChat=onSnapshot(query(collection(db,"liveChats",id,"messages"),orderBy("createdAt","asc")),function(snap){
+        var target=document.getElementById("liveChatMessages");if(!target)return;target.innerHTML="";
+        if(!snap.size){target.innerHTML='<div class="chat-admin-empty">No messages in this conversation yet.</div>';return;}
+        snap.forEach(function(d){var m=d.data();var bubble=document.createElement("div");bubble.className="chat-admin-bubble "+(m.senderRole==="admin"?"admin":"user");var body=document.createElement("span");body.textContent=String(m.text||"");bubble.append(body);var time=document.createElement("small");time.textContent=chatTime(m.createdAt);bubble.append(time);target.append(bubble);});target.scrollTop=target.scrollHeight;
+      },function(err){console.error(err);messages.innerHTML='<div class="chat-admin-empty">Unable to read this conversation. Check Firestore rules.</div>';});
     }
 
     /* ================================================================
