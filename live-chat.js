@@ -81,25 +81,8 @@ import { collection, addDoc, doc, getDoc, onSnapshot, orderBy, query, serverTime
     }
   }
 
-  function addMessage(data, id) {
-    if (seenMessageIds.has(id)) return;
-    seenMessageIds.add(id);
-    const empty = messagesEl.querySelector(".fs-chat-empty");
-    if (empty) empty.remove();
-    const bubble = document.createElement("div");
-    bubble.className = "fs-chat-msg " + (data.senderRole === "admin" ? "fs-admin" : "fs-user");
-    const body = document.createElement("span");
-    body.textContent = String(data.text || "");
-    bubble.append(body);
-    const time = document.createElement("span");
-    time.className = "fs-chat-time";
-    time.textContent = safeDate(data.createdAt);
-    bubble.append(time);
-    messagesEl.append(bubble);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
   function watchMessages() {
+    if (!chatId) return;
     if (unsubMessages) unsubMessages();
     seenMessageIds.clear();
     const q = query(collection(db, "liveChats", chatId, "messages"), orderBy("createdAt", "asc"));
@@ -152,25 +135,19 @@ import { collection, addDoc, doc, getDoc, onSnapshot, orderBy, query, serverTime
       status.textContent = "Please sign in to use support chat.";
       return;
     }
+    
     chatId = user.uid;
+    
+    // Check if chat exists, but DO NOT create it yet if it doesn't
     try {
       const chatRef = doc(db, "liveChats", chatId);
       const existing = await getDoc(chatRef);
-      if (!existing.exists()) {
-        await setDoc(chatRef, {
-          ownerUid: user.uid,
-          ownerEmail: user.email || "",
-          ownerName: user.displayName || "Website visitor",
-          isAnonymous: !!user.isAnonymous,
-          status: "open",
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          lastMessage: "",
-        });
+      if (existing.exists()) {
+        watchMessages();
       } else {
-        await updateDoc(chatRef, { updatedAt: serverTimestamp() });
+        // We don't create the doc here. We just wait for them to send a message.
+        status.textContent = "Send a message to start a conversation.";
       }
-      watchMessages();
     } catch (err) {
       console.error("Live chat setup:", err);
       status.textContent = "Chat setup failed. Please contact support.";
@@ -201,18 +178,42 @@ import { collection, addDoc, doc, getDoc, onSnapshot, orderBy, query, serverTime
     if (!text || !currentUser || !chatId || busy) return;
     busy = true;
     send.disabled = true;
+    
     try {
+      const chatRef = doc(db, "liveChats", chatId);
+      const existing = await getDoc(chatRef);
+      
+      // If the chat doesn't exist yet, create it now with the first message
+      if (!existing.exists()) {
+        await setDoc(chatRef, {
+          ownerUid: currentUser.uid,
+          ownerEmail: currentUser.email || "",
+          ownerName: currentUser.displayName || "Website visitor",
+          isAnonymous: !!currentUser.isAnonymous,
+          status: "open",
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          lastMessage: text,
+        });
+        // Start watching the new chat
+        watchMessages();
+      }
+
+      // Send the message
       await addDoc(collection(db, "liveChats", chatId, "messages"), {
         text,
         senderUid: currentUser.uid,
         senderRole: "user",
         createdAt: serverTimestamp(),
       });
-      await updateDoc(doc(db, "liveChats", chatId), {
+      
+      // Update the last message preview
+      await updateDoc(chatRef, {
         updatedAt: serverTimestamp(),
         lastMessage: text,
         status: "open",
       });
+      
       input.value = "";
     } catch (err) {
       console.error("Send chat message:", err);

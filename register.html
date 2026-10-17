@@ -129,7 +129,6 @@
     .auth-foot{text-align:center;padding:26px 20px 40px;font-size:13px;color:var(--muted);}
     .auth-foot a{color:var(--gold);font-weight:600;}
 
-    /* Success modal for admin-created accounts */
     .modal-bg{position:fixed;inset:0;background:rgba(15,12,7,.65);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;backdrop-filter:blur(4px);}
     .modal-bg.show{display:flex;animation:fadeIn .25s ease;}
     .modal{background:var(--paper);border-radius:4px;max-width:480px;width:100%;padding:36px 34px 30px;text-align:center;box-shadow:var(--shadow);animation:popIn .35s cubic-bezier(.34,1.56,.64,1);}
@@ -182,7 +181,6 @@
 
   <div class="auth-wrap">
 
-    <!-- Admin mode banner (only visible when ?from=admin) -->
     <div class="admin-banner" id="adminBanner">
       <div class="ab-ico">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="2" fill="none"/><path d="M3.5 16.5c0-3 2.4-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M16 5v4M14 7h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -338,7 +336,6 @@
     <a href="terms.html">Terms</a> &middot; <a href="contact.html">Support</a>
   </p>
 
-  <!-- Success modal (admin mode) -->
   <div class="modal-bg" id="successModalBg">
     <div class="modal">
       <div class="m-ico">
@@ -375,7 +372,6 @@ var params = new URLSearchParams(window.location.search);
 var fromAdmin = params.get("from") === "admin";
 var adminUser = null;
 
-/* Show banner immediately if the URL says so */
 if(fromAdmin){
   document.getElementById("adminBanner").classList.add("show");
   document.getElementById("formTitle").textContent = "Create a user account";
@@ -383,11 +379,9 @@ if(fromAdmin){
   document.getElementById("authSwitchRow").style.display = "none";
 }
 
-/* Watch auth state so we know if it's the admin doing this */
 onAuthStateChanged(auth, function(user){
   if(user && user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
     adminUser = user;
-    /* Auto-enable admin mode if admin is signed in, regardless of URL */
     document.getElementById("adminBanner").classList.add("show");
     document.getElementById("formTitle").textContent = "Create a user account";
     document.getElementById("formSub").textContent = "Fill in the user's details. On save, you'll receive their login credentials to share.";
@@ -524,18 +518,8 @@ form.addEventListener('submit', async function(e){
       createdAt: serverTimestamp()
     });
 
-    /* If admin created this account, don't sign them out */
+    /* If admin created this account, don't sign them out — show credentials modal */
     if(adminUser){
-      /* Sign the new user out, but the admin's session... */
-      /* Firebase has only one auth session, so the act of creating */
-      /* the user replaced the admin's session. We re-sign the admin in. */
-
-      /* Firestore rules allow the write above because the newly created user */
-      /* is the signed-in user at that moment. Now we need to restore admin. */
-
-      /* Re-authenticate admin — we don't have their password here */
-      /* So instead we show the credentials and instruct them to sign back in. */
-
       document.getElementById("credEmail").textContent = email;
       document.getElementById("credPassword").textContent = password;
       document.getElementById("credAccount").textContent = accountNumber;
@@ -546,7 +530,6 @@ form.addEventListener('submit', async function(e){
       form.reset();
       note.className = 'form-note';
 
-      /* Wire copy button */
       document.getElementById("copyCredsBtn").onclick = function(){
         var txt = "First State Bank — Account Credentials\n" +
                   "Login page: https://firststatebank.uk/login.html\n" +
@@ -563,10 +546,10 @@ form.addEventListener('submit', async function(e){
       return;
     }
 
-    /* Normal signup path */
-    await signOut(auth);
-    showNote('Account created successfully! Redirecting to sign in…', 'ok');
-    setTimeout(function(){ window.location.href = 'login.html'; }, 1200);
+    /* Normal signup — user is now signed in automatically */
+    /* Redirect them straight to their dashboard */
+    showNote('Account created! Redirecting to your dashboard…', 'ok');
+    setTimeout(function(){ window.location.href = 'dashboard.html'; }, 900);
 
   } catch(err){
     var msg = "Something went wrong. Please try again.";
